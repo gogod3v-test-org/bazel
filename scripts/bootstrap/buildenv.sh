@@ -222,6 +222,7 @@ function display() {
 
 function log() {
   echo -n "." >&2
+  echo "LOG: $1" >&2
   echo "$1" >${phasefile}
 }
 
