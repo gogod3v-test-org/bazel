@@ -19,8 +19,49 @@ jobs:
       # Checkout the code as the first step.
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "Install bazelisk via curl"
+          command: |
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            # Download Bazelisk using curl
+            # Define the Bazelisk version you want to install
+            export BAZELISK_VERSION='1.21.0'
+
+            # Determine the operating system
+            OS="$(uname -s)"
+            case "$OS" in
+                Linux*)     OS_NAME=linux;;
+                Darwin*)    OS_NAME=darwin;;
+                *)          echo "Unsupported OS: $OS"; exit 1;;
+            esac
+
+            # Download Bazelisk using curl based on the operating system
+            if [ "$OS_NAME" = "linux" ]; then
+                curl -fLO "https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-linux-amd64"
+                mv bazelisk-linux-amd64 bazel
+            elif [ "$OS_NAME" = "darwin" ]; then
+                curl -fLO "https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/bazelisk-darwin-arm64"
+                mv bazelisk-darwin-arm64 bazel
+            fi
+
+            # Make the binary executable
+            chmod +x bazel
+
+            # Move the executable to a directory in your PATH
+            sudo mv bazel /usr/local/bin/
+
+            # Verify the installation
+            bazel --version
+      - run:
+          name: "Bazel build"
+          command: |
+            #!/usr/bin/env bash
+            set -exo pipefail
+
+            # write your script here
+            bazel build //src:bazel-dev --announce_rc
+
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
