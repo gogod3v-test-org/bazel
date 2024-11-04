@@ -13,6 +13,17 @@ commands: # a reusable command with parameters
             echo 'build --remote_cache=grpcs://gogod3v.buildbuddy.io' >> ~/.bazelrc
             echo 'build --remote_timeout=3600' >> ~/.bazelrc
             echo "build --remote_header=x-buildbuddy-api-key=$BUILDBUDDY_API_KEY" >> ~/.bazelrc
+  configure-bazel-build-cache-nativelink:
+    steps:
+      - run:
+          name: "Enable Buildbuddy Build Cache for Bazel"
+          command: |
+            echo 'build --remote_cache=grpcs://cas-gogod3v-b7688m.build-faster.nativelink.net' > ~/.bazelrc
+            echo 'build --remote_header=x-nativelink-api-key=$NATIVELINK_API_KEY' >> ~/.bazelrc
+            echo 'build --bes_backend=grpcs://bes-gogod3v-b7688m.build-faster.nativelink.net' >> ~/.bazelrc
+            echo 'build --bes_header=x-nativelink-api-key=$NATIVELINK_API_KEY' >> ~/.bazelrc
+            echo 'build --bes_results_url=https://app.nativelink.com/a/gogod3v/build' >> ~/.bazelrc
+            echo 'build --remote_timeout=600' >> ~/.bazelrc
   configure-bazel-build-cache-bitrise:
     steps:
       - run:
@@ -108,6 +119,14 @@ jobs:
       - install-bazel
       - configure-bazel-build-cache-bitrise
       - bazel-build
+  run-tests-with-nativelink-build-cache:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - install-bazel
+      - configure-bazel-build-cache-nativelink
+      - bazel-build
 
 
 # Orchestrate jobs using workflows
@@ -119,3 +138,4 @@ workflows:
       - run-tests-without-build-cache
       - run-tests-with-buildbuddy-build-cache
       - run-tests-with-bitrise-build-cache
+      - run-tests-with-nativelink-build-cache
