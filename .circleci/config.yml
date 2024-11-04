@@ -6,7 +6,8 @@ commands: # a reusable command with parameters
   configure-bazel-build-cache-buildbuddy:
     steps:
       - run:
-          command: echo 'TODO: build cache config'
+          command: |
+            echo 'TODO: build cache config'
   bazel-build:
     steps:
       - run:
