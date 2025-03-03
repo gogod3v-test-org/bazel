@@ -44,8 +44,10 @@ commands: # a reusable command with parameters
             # run the CLI to enable Bitrise build cache for Bazel
             /tmp/bin/bitrise-build-cache enable-for bazel
 
-            echo "[debug] Endpoint:"
-            echo "$BITRISE_BUILD_CACHE_ENDPOINT" | base64
+            if [ ! -z "$BITRISE_BUILD_CACHE_ENDPOINT" ]; then
+              echo "[debug] Endpoint:"
+              echo "$BITRISE_BUILD_CACHE_ENDPOINT" | base64
+            fi
   bazel-build:
     steps:
       - run:
