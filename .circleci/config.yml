@@ -36,7 +36,7 @@ commands: # a reusable command with parameters
           name: "Enable Bitrise Build Cache for Bazel"
           command: |
             #!/usr/bin/env bash
-            set -euxo pipefail
+            set -exo pipefail
             
             # download Bitrise Build Cache CLI
             curl --retry 5 -sSfL 'https://raw.githubusercontent.com/bitrise-io/bitrise-build-cache-cli/main/install/installer.sh' | sh -s -- -b /tmp/bin -d
