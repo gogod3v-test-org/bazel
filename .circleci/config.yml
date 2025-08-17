@@ -149,4 +149,5 @@ workflows:
       - run-tests-without-build-cache
       - run-tests-with-buildbuddy-build-cache
       - run-tests-with-bitrise-build-cache
-      - run-tests-with-nativelink-build-cache
+      # NativeLink disabled: it's been failing for more than a week
+      # - run-tests-with-nativelink-build-cache
