@@ -56,6 +56,8 @@ commands: # a reusable command with parameters
             #!/usr/bin/env bash
             set -exo pipefail
 
+            printenv
+
             # write your script here
             bazel build //src:bazel-dev --announce_rc
   install-bazel:
